@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style/reset.css">
+    <link rel="stylesheet" href="./style/style.css">
+    <title>Jogo da Velha</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="container__single container__single--active">
+            
+            <section class="container__section menu">
+                <h1 class="container__title menu__title">Jogo da Velha</h1>
+                <div class="menu__game-modes">
+                    <input class="container__button menu__button" type="button" value="Jogador Vs Jogador">
+                    <input class="container__button menu__button" type="button" value="Jogador Vs Computador">
+                    <input class="container__button menu__button" type="button" value="Computador Vs Computador">
+                </div>
+            </section>
+
+        </div>
+
+        <div class="container__single">
+
+            <section class="container__section settings">
+                <h2 class="container__title settings__title">Selecione os ícones</h2>
+
+                <div class="settings__players">
+
+                    <div class="settings__individual-player">
+                        <input class="settings__player-name" type="text" name="player1-name" placeholder="Jogador 1..." maxlength="12">
+                        <ul  class="settings__player-icons">
+                            <li class="settings__icon-button">
+                                <img class="settings__icon-image" src="./assets/circle-icon.png" alt="Icone Círculo">
+                            </li>
+                            <li class="settings__icon-button">
+                                <img class="settings__icon-image" src="./assets/x-icon.png" alt="Icone X">
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="settings__individual-player">
+                        <input class="settings__player-name" type="text" name="player2-name" placeholder="Jogador 2..." maxlength="12">
+                        <ul  class="settings__player-icons">
+                            <li class="settings__icon-button">
+                                <img class="settings__icon-image" src="./assets/circle-icon.png" alt="Icone Círculo">
+                            </li>
+                            <li class="settings__icon-button">
+                                <img class="settings__icon-image" src="./assets/x-icon.png" alt="Icone X">
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <input class="container__button settings__button" id="start-game-button" type="button" value="Iniciar">
+                
+            </section>
+
+        </div>
+
+        <div class="container__single">
+
+            <section class="container__section game">
+                <div class="game__scoreboard">
+                    <div class="game__scoreboard-player" id="scoreboard-player1">
+                        <h3 class="game__player-name">Jogador 1</h3>
+                        <span class="game__player-score">0</span>
+                    </div>
+
+                    <div class="game__scoreboard-player" id="scoreboard-player2">
+                        <h3 class="game__player-name">Jogador 2</h3>
+                        <span class="game__player-score">0</span>
+                    </div>
+                </div>
+
+                <div class="game__board board" id="board">
+                    <div class="board__container">
+                        <div class="board__cell" id="0"></div>
+                        <div class="board__cell" id="1"></div>
+                        <div class="board__cell" id="2"></div>
+                        <div class="board__cell" id="3"></div>
+                        <div class="board__cell" id="4"></div>
+                        <div class="board__cell" id="5"></div>
+                        <div class="board__cell" id="6"></div>
+                        <div class="board__cell" id="7"></div>
+                        <div class="board__cell" id="8"></div>
+                    </div>
+
+                    <div class="board__container board__end-game board__face-back" id="board-end-game">
+                        <h4 class="container__title board__title"></h4>
+                        <p class="board__info"></p>
+                        <input class="container__button game__restart-button" id="restart-game-button" type="button" value="Reiniciar Jogo">
+                    </div>
+                </div>  
+
+                <input class="container__button game__button" id="back-menu-button" type="button" value="Voltar ao Menu">
+
+            </section> 
+
+        </div>
+
+    </div>
+
+    <script src="./scripts/game.js"></script>
+    <script src="./scripts/interface.js"></script>
+    <script src="./scripts/createSVG.js"></script>
+    
+</body>
+
+</html>
