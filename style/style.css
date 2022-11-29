@@ -212,7 +212,7 @@ body{
 }
 
 .settings__button--active{
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.1rem;
     background-color: var(--first-element-color);
     color: var(--third-font-color);
 }
