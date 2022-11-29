@@ -81,22 +81,6 @@ function attPlayerTurnStyle(){
     scoreboardsPlayers[game.playerTurn].classList.add("game__scoreboard-player--active");
 };
 
-function startGame(){
-
-
-
-
-
-
-
-    boardCells.forEach((cell)=>{
-        cell.removeEventListener("click", handleClickPlayer);
-    });
-
-    verifyPlayerType();
-
-};
-
 gameModeButtons.forEach((button, index)=>{
     button.addEventListener("click",()=>{
         setPlayersType(index);
@@ -123,7 +107,6 @@ startGameButton.addEventListener("click", ()=>{
         changeSection();
         attScoreboard();
         attPlayerTurnStyle();
-        startGame();
     }else{
         allIconButtons.forEach((button)=>{
             button.classList.remove("settings__icon-button--error");
@@ -134,6 +117,9 @@ startGameButton.addEventListener("click", ()=>{
         });
     };
 });
+
+
+/*******/ 
 
 function resetGame(){
     game.players.forEach((player)=>{player.score = 0});
@@ -150,5 +136,9 @@ function resetInterface(){
 };
 
 function resetBoard(){
-
+    game.board = game.board.map(position => "");
+    game.gameOver = false;
+    game.endRoundInfo.name = "";
+    game.endRoundInfo.winnerPositions = [];
+    game.endRoundInfo.tie = false;
 };

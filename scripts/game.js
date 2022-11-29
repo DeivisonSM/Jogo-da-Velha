@@ -14,9 +14,32 @@ const game = {
         }
     ],
 
+    board: ["","","","","","","","",""],
+
+    winnerPositions: [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+    ],
+
     ready: false,
 
-    playerTurn: 0
+    playerTurn: 0,
+
+    firstPlayerTurn: 0,
+
+    gameOver: false,
+
+    endRoundInfo: {
+        name: "",
+        winnerPositions: [],
+        tie: false,
+    }
 
 };
 
@@ -57,3 +80,64 @@ function setPlayerName(playerName, player){
 function setGameReady(){
     game.ready = true;
 }
+
+function canHandleMove(cell){    
+    if(game.board[cell] === "" && !game.gameOver){
+        handleMove(cell);
+        return true;
+    }else{
+        return false;
+    };
+};
+
+function handleMove(cell){
+    game.board[cell] = game.players[game.playerTurn].icon;
+    verifyWinner();
+    
+    if(!game.gameOver)
+        verifyTie();
+};
+
+function verifyWinner(){
+    game.winnerPositions.forEach((positions)=>{
+       if(game.board[positions[0]] === game.players[game.playerTurn].icon &&
+       game.board[positions[1]] === game.players[game.playerTurn].icon &&
+       game.board[positions[2]] === game.players[game.playerTurn].icon){
+            game.gameOver = true;
+            game.players[game.playerTurn].score++;
+            game.endRoundInfo.name = game.players[game.playerTurn].name;
+            game.endRoundInfo.winnerPositions = [positions[0], positions[1], positions[2]];
+            return;
+       };
+    });
+};
+
+function verifyTie(){
+    game.gameOver = true;
+    game.endRoundInfo.tie = true;
+
+    game.board.forEach((position)=>{
+        if(position === ""){
+            game.gameOver = false;
+            game.endRoundInfo.tie = false;
+            return;
+        };
+    });
+};
+
+function changePlayerTurn(){
+    game.playerTurn = game.playerTurn === 0 ? 1 : 0;
+};
+
+function computerMove(){
+    let aux = false;
+    let randomMove;
+
+    while(!aux){
+        randomMove = Math.floor(Math.random() * game.board.length);
+        if(game.board[randomMove] === ""){
+            aux = true;
+            return randomMove;
+        };
+    };
+};
