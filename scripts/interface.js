@@ -1,5 +1,6 @@
 const gameModeButtons = document.querySelectorAll(".menu__button");
 const startGameButton = document.querySelector("#start-game-button");
+const restartGameButton = document.querySelector("#restart-game-button");
 const backMenubutton = document.querySelector("#back-menu-button");
 
 const inputsPlayerName = document.querySelectorAll(".settings__player-name");
@@ -177,8 +178,40 @@ function attEndGameInfo(){
 
 function changeBoard(){
     const board = document.querySelector("#board");
+    
+    if(game.gameOver){
+        board.classList.remove("board--no-active");
+        board.classList.add("board--active");
+        boardCells.forEach((cell)=>{
+            cell.style.pointerEvents = "none";
+        });
+    }else{
+        board.classList.add("board--no-active");
+        board.classList.remove("board--active");
+        boardCells.forEach((cell)=>{
+            cell.style.pointerEvents = "auto";
+        });
+    };
 };
 
+function resetBoardCells(){
+    boardCells.forEach((cell)=>{
+        cell.innerHTML = "";
+    });
+};
+
+function resetInterface(){
+    attButtonsIconStyle();
+    attStartGameButtonStyle();
+    inputsPlayerName.forEach((input)=>{
+        input.value = "";
+    });
+    setClickOnCells();
+    resetBoard();
+    endGameAnimation();
+    resetBoardCells()
+    changeBoard();
+};
 
 /*************** */
 
@@ -221,32 +254,15 @@ startGameButton.addEventListener("click", ()=>{
     };
 });
 
-/*******/ 
-
-function resetGame(){
-    game.players.forEach((player)=>{player.score = 0});
-    game.ready = false;
-    game.playerTurn = 0;
-};
-
-function resetBoard(){
-    game.board = game.board.map(position => "");
-    game.gameOver = false;
-    game.endRoundInfo.name = "";
-    game.endRoundInfo.winnerPositions = [];
-    game.endRoundInfo.tie = false;
-
-    boardCells.forEach((cell)=>{
-        cell.innerHTML = "";
-    });
-};
-
-function resetInterface(){
-    attButtonsIconStyle();
-    attStartGameButtonStyle();
-    inputsPlayerName.forEach((input)=>{
-        input.value = "";
-    });
-    setClickOnCells();
+restartGameButton.addEventListener("click",()=>{
+    resetBoard();
     endGameAnimation();
-};
+    resetBoardCells();
+    changeBoard();
+});
+
+backMenubutton.addEventListener("click",()=>{
+    resetGame();
+    resetInterface();
+    changeSection();
+});

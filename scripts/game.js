@@ -141,3 +141,19 @@ function computerMove(){
         };
     };
 };
+
+function resetBoard(){
+    game.board = game.board.map(position => "");
+    game.gameOver = false;
+    game.endRoundInfo.name = "";
+    game.endRoundInfo.winnerPositions = [];
+    game.endRoundInfo.tie = false;
+};
+
+function resetGame(){
+    game.players.forEach((player)=>{player.score = 0});
+    game.ready = false;
+    game.playerTurn = 0;
+
+    resetBoard();
+};
