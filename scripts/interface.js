@@ -11,6 +11,7 @@ const boardCells = document.querySelectorAll(".board__cell");
 
 let currentContainer = 0;
 let blockedClick = true;
+let myTimeout;
 
 function changeSection(){
     const pageContainers = document.querySelectorAll(".container__single");
@@ -84,9 +85,6 @@ function attPlayerTurnStyle(){
     scoreboardsPlayers[game.playerTurn].classList.add("game__scoreboard-player--active");
 };
 
-
-/*************** */
-
 function setClickOnCells(){
     if(game.ready){
         boardCells.forEach((cell)=>{
@@ -104,7 +102,7 @@ function verifyPlayerType(){
         blockedClick = false;
     }else{
         blockedClick = true;
-        console.log("Vez do pc");
+        handleComputerClick();
     };
 };
 
@@ -115,6 +113,19 @@ function handlePlayerClick(){
         else
             cellError(this);
     };
+};
+
+function handleComputerClick(){
+    const cell = computerMove();
+
+    myTimeout = setTimeout(()=>{
+        if(canHandleMove(cell))
+            finishMove(boardCells[cell])
+    }, 1000);
+};
+
+function breakTimeout(){
+    clearTimeout(myTimeout);
 };
 
 function cellError(cell){
@@ -207,13 +218,12 @@ function resetInterface(){
         input.value = "";
     });
     setClickOnCells();
+    breakTimeout();
     resetBoard();
     endGameAnimation();
     resetBoardCells()
     changeBoard();
 };
-
-/*************** */
 
 gameModeButtons.forEach((button, index)=>{
     button.addEventListener("click",()=>{
@@ -256,9 +266,12 @@ startGameButton.addEventListener("click", ()=>{
 
 restartGameButton.addEventListener("click",()=>{
     resetBoard();
+    changeFirstPlayerTurn();
+    attPlayerTurnStyle();
     endGameAnimation();
     resetBoardCells();
     changeBoard();
+    verifyPlayerType();
 });
 
 backMenubutton.addEventListener("click",()=>{

@@ -129,6 +129,11 @@ function changePlayerTurn(){
     game.playerTurn = game.playerTurn === 0 ? 1 : 0;
 };
 
+function changeFirstPlayerTurn(){
+    game.firstPlayerTurn = game.firstPlayerTurn === 0 ? 1 : 0;
+    game.playerTurn = game.firstPlayerTurn;
+};
+
 function computerMove(){
     let aux = false;
     let randomMove;
@@ -151,9 +156,10 @@ function resetBoard(){
 };
 
 function resetGame(){
-    game.players.forEach((player)=>{player.score = 0});
+    game.players.forEach((player)=>{player.score = 0; player.type = ""});
     game.ready = false;
     game.playerTurn = 0;
+    game.firstPlayerTurn = 0;
 
     resetBoard();
 };
