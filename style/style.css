@@ -21,17 +21,16 @@ html,body{
     --medium-font-size: 1.3rem;
     --small-font-size: 0.8rem;
 
-    --first-background-color: #1F1F1F;
-    --second-background-color: #2D2D2D;
-    --third-background-color: #4b4b4b;
-
-    --first-element-color: #43A047;
-    --second-element-color: var(--first-font-color);
+    --first-page-color: #1F1F1F;
+    --second-page-color: #2D2D2D;
+    --third-page-color: #4b4b4b;
+    --fourth-page-color: #43A047;
+    --fifth-page-color: #EEEEEE;
 
     --first-font-color: #EEEEEE;
     --second-font-color: #4b4b4b;
-    --third-font-color: var(--first-background-color);
-    --fourth-font-color: var(--first-element-color);
+    --third-font-color: var(--first-page-color);
+    --fourth-font-color: var(--fourth-page-color);
 
     --icon-0-color: #e5371a;
     --icon-1-color: #00acc5;
@@ -42,7 +41,7 @@ body{
     height: 100%; 
     min-height: var(--min-page-height);  
     font-family: 'Quicksand', sans-serif;
-    background-color: var(--first-background-color);
+    background-color: var(--first-page-color);
 }
 
 .container{
@@ -82,7 +81,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--big-spacing-size);   
+    gap: var(--big-spacing-size);
 }
 
 .container__title{
@@ -91,7 +90,7 @@ body{
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 0.2rem;
-    border-left: 0.3rem solid var(--first-element-color);
+    border-left: 0.3rem solid var(--fourth-page-color);
     color: var(--first-font-color);
 }
 
@@ -119,14 +118,14 @@ body{
 
 .menu__button{
     width: 20rem;
-    background-color: var(--first-element-color);
+    background-color: var(--fourth-page-color);
     color: var(--third-font-color);
 }
 
 .menu__button:hover{
     letter-spacing: 0.05rem;
     transform: scale(1.05);
-    box-shadow: 0px 0px 14px 0px var(--first-element-color);
+    box-shadow: 0rem 0rem 0.9rem 0rem var(--fourth-page-color);
 }
 
 .settings__title{
@@ -188,12 +187,12 @@ body{
     text-align: center;
     cursor: pointer;
     transition: background-color 300ms;
-    background-color: var(--second-background-color);
+    background-color: var(--second-page-color);
 }
 
 .settings__icon-button:hover,
 .settings__icon-button--active{
-    background-color: var(--third-background-color);
+    background-color: var(--third-page-color);
 }
 
 .settings__icon-button--error{
@@ -206,14 +205,14 @@ body{
 
 .settings__button{
     width: 13rem;
-    border: 0.2rem solid var(--first-element-color);
+    border: 0.2rem solid var(--fourth-page-color);
     background-color: transparent;
-    color: var(--fourth-font-color);
+    color: var(--fourth-page-color);
 }
 
 .settings__button--active{
     letter-spacing: 0.1rem;
-    background-color: var(--first-element-color);
+    background-color: var(--fourth-page-color);
     color: var(--third-font-color);
 }
 
@@ -239,7 +238,7 @@ body{
 }
 
 .game__scoreboard-player--active{
-    background-color: var(--second-background-color);
+    background-color: var(--second-page-color);
 }
 
 .game__board{
@@ -247,8 +246,6 @@ body{
     padding-top: 80%;
     position: relative;
 }
-
-/**CARD EFFECT**/
 
 .board{
     transform-style: preserve-3d;
@@ -262,12 +259,6 @@ body{
 .board--active{
     animation: endGameBoard 0.5s 1.5s 1 forwards;
 }
-
-.board__face-back{
-    transform: rotateY(-180deg);
-}
-
-/****/
 
 .board__container{
     width: 100%;
@@ -290,11 +281,11 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--second-background-color);
+    background-color: var(--second-page-color);
 }
 
 .board__cell:hover{
-    background-color: var(--third-background-color);
+    background-color: var(--third-page-color);
 }
 
 .board__cell--error{
@@ -309,14 +300,14 @@ body{
     stroke-width: 1.1rem;
     stroke: var(--icon-0-color);
     stroke-dasharray: 380;
-    animation: drawing-circle 0.5s 1 forwards;
+    animation: draw-circle 0.5s 1 forwards;
 }
 
 .board__icon-1{
     stroke-width: 4.5rem;
     stroke: var(--icon-1-color);
     stroke-dasharray: 650;
-    animation: drawing-x 0.5s 1 forwards;
+    animation: draw-x 0.5s 1 forwards;
 }
 
 .board__end-game{
@@ -324,14 +315,17 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    background-color: var(--second-background-color);
+    background-color: var(--second-page-color);
+    transform: rotateY(-180deg);
 }
 
 .board__title{
     padding-left: 0;
     padding-bottom: var(--medium-spacing-size);
     border-left: 0;
-    border-bottom: 0.3rem solid var(--first-element-color);
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0.3rem solid var(--fourth-page-color);
     font-size: var(--big-font-size);
 }
 
@@ -344,96 +338,27 @@ body{
 
 .game__restart-button{
     width: 12rem;
-    background-color: var(--second-element-color);
+    background-color: var(--fifth-page-color);
     color: var(--third-font-color);
 }
 
 .game__restart-button:hover{
     letter-spacing: 0.05rem;
     transform: scale(1.05);
-    box-shadow: 0px 0px 14px 0px var(--second-element-color);
+    box-shadow: 0rem 0rem 0.9rem 0rem var(--fifth-page-color);
 }
 
 .game__button{
     width: 13rem;
-    border: 0.2rem solid var(--first-element-color);
+    border: 0.2rem solid var(--fourth-page-color);
     background-color: transparent;
     color: var(--fourth-font-color);
 }
 
 .game__button:hover{
-    box-shadow: 0px 0px 14px 0px var(--first-element-color);
-    background-color: var(--first-element-color);
+    box-shadow: 0rem 0rem 0.9rem 0rem var(--fourth-page-color);
+    background-color: var(--fourth-page-color);
     color: var(--third-font-color);
-}
-
-@keyframes error {
-    0%{
-        transform: translateX(-0.4rem);
-    }
-    25%{
-        transform: translateX(0.4rem);
-    }
-    50%{
-        transform: translateX(-0.4rem);
-    }
-    75%{
-        transform: translateX(0.4rem);
-    }
-    100%{
-        transform: translateX(-0.4rem);
-    }
-}
-
-@keyframes drawing-circle {
-    0%{
-        stroke-dashoffset: 380;
-    }
-    100%{
-        stroke-dashoffset: 0;
-    }
-}
-
-@keyframes drawing-x {
-    0%{
-        stroke-dashoffset: 650;
-    }
-    100%{
-        stroke-dashoffset: 0;
-    }
-}
-
-@keyframes endGameCell {
-    0%{
-        background-color: var(--second-background-color);
-        transform: scale(1);
-    }
-    50%{
-        background-color: var(--third-background-color);
-        transform: scale(1.05);
-    }
-    100%{
-        background-color: var(--second-background-color);
-        transform: scale(1);
-    }
-}
-
-@keyframes endGameBoard {
-    0%{
-        transform: rotateY(0);
-    }
-    100%{
-        transform: rotateY(-180deg);
-    }
-}
-
-@keyframes newGameBoard {
-    0%{
-        transform: rotateY(-180deg);
-    }
-    100%{
-        transform: rotateY(0);
-    }
 }
 
 @media screen and (max-width:620px) {
@@ -459,3 +384,73 @@ body{
         font-size: 8px;
     }
 }
+
+@keyframes error {
+    0%{
+        transform: translateX(-0.4rem);
+    }
+    25%{
+        transform: translateX(0.4rem);
+    }
+    50%{
+        transform: translateX(-0.4rem);
+    }
+    75%{
+        transform: translateX(0.4rem);
+    }
+    100%{
+        transform: translateX(-0.4rem);
+    }
+}
+
+@keyframes draw-circle {
+    0%{
+        stroke-dashoffset: 380;
+    }
+    100%{
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes draw-x {
+    0%{
+        stroke-dashoffset: 650;
+    }
+    100%{
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes endGameCell {
+    0%{
+        background-color: var(--second-page-color);
+        transform: scale(1);
+    }
+    50%{
+        background-color: var(--third-page-color);
+        transform: scale(1.05);
+    }
+    100%{
+        background-color: var(--second-page-color);
+        transform: scale(1);
+    }
+}
+
+@keyframes endGameBoard {
+    0%{
+        transform: rotateY(0);
+    }
+    100%{
+        transform: rotateY(-180deg);
+    }
+}
+
+@keyframes newGameBoard {
+    0%{
+        transform: rotateY(-180deg);
+    }
+    100%{
+        transform: rotateY(0);
+    }
+}
+
