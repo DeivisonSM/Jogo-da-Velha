@@ -1,6 +1,5 @@
 const gameModeButtons = document.querySelectorAll(".menu__button");
 const startGameButton = document.querySelector("#start-game-button");
-const restartGameButton = document.querySelector("#restart-game-button");
 const backMenubutton = document.querySelector("#back-menu-button");
 
 const inputsPlayerName = document.querySelectorAll(".settings__player-name");
@@ -10,8 +9,7 @@ const allIconButtons = document.querySelectorAll(".settings__icon-button");
 const boardCells = document.querySelectorAll(".board__cell");
 
 let currentContainer = 0;
-let blockedClick = true;
-let myTimeout;
+let blockedClick = false;
 
 function changeSection(){
     const pageContainers = document.querySelectorAll(".container__single");
@@ -62,17 +60,13 @@ function attScoreboard(){
     const player1Score = document.querySelector("#scoreboard-player1 > .game__player-score");
     const player2Score = document.querySelector("#scoreboard-player2 > .game__player-score");
 
-    function attScoreboardStyle(){
-        player1Name.style.color = `var(--icon-${game.players[0].icon}-color)`;
-        player2Name.style.color = `var(--icon-${game.players[1].icon}-color)`;
-    };
-
     player1Name.innerText = game.players[0].name;
     player2Name.innerText = game.players[1].name;
     player1Score.innerText = game.players[0].score;
     player2Score.innerText = game.players[1].score;
 
-    attScoreboardStyle();
+    player1Name.style.color = `var(--icon-${game.players[0].icon}-color)`;
+    player2Name.style.color = `var(--icon-${game.players[1].icon}-color)`;
 };
 
 function attPlayerTurnStyle(){
@@ -85,47 +79,31 @@ function attPlayerTurnStyle(){
     scoreboardsPlayers[game.playerTurn].classList.add("game__scoreboard-player--active");
 };
 
-function setClickOnCells(){
-    if(game.ready){
-        boardCells.forEach((cell)=>{
-            cell.addEventListener("click", handlePlayerClick);
-        });
+function handleClick(position){
+    if(canHandleMove(position)){
+        addIconOnCell(boardCells[position]);
+        finishMove();
     }else{
-        boardCells.forEach((cell)=>{
-            cell.removeEventListener("click", handlePlayerClick);
-        });
-    };
+        cellError(boardCells[position]);
+    }; 
 };
 
-function verifyPlayerType(){
-    if(game.players[game.playerTurn].type === "player"){
-        blockedClick = false;
+function finishMove(){
+    if(!game.gameOver){
+        changePlayerTurn();
+        attPlayerTurnStyle();
+        /*verifyPlayerType();*/
     }else{
-        blockedClick = true;
-        handleComputerClick();
+        attScoreboard();
+        endGameAnimation();
+        attEndGameInfo();
+        changeBoard();/*********************************** */
     };
 };
 
-function handlePlayerClick(){
-    if(!blockedClick){
-        if(canHandleMove(this.id))
-            finishMove(this);
-        else
-            cellError(this);
-    };
-};
-
-function handleComputerClick(){
-    const cell = computerMove();
-
-    myTimeout = setTimeout(()=>{
-        if(canHandleMove(cell))
-            finishMove(boardCells[cell])
-    }, 1000);
-};
-
-function breakTimeout(){
-    clearTimeout(myTimeout);
+function addIconOnCell(cell){
+    const icon = verifyIcon();
+    cell.appendChild(icon);
 };
 
 function cellError(cell){
@@ -136,33 +114,12 @@ function cellError(cell){
     }, 5);
 };
 
-function finishMove(cell){
-  
-    addIconOnCell(cell);    
-
-    if(!game.gameOver){
-        changePlayerTurn();
-        attPlayerTurnStyle();
-        verifyPlayerType();
-    }else{
-        attScoreboard();
-        endGameAnimation();
-        attEndGameInfo();
-        changeBoard();
-    };
-};
-
-function addIconOnCell(cell){
-    const icon = verifyIcon();
-    cell.appendChild(icon);
-};
-
 function endGameAnimation(){    
-    if(!game.endRoundInfo.tie && game.gameOver){
-        game.endRoundInfo.winnerPositions.forEach((position)=>{
+    if(!game.winnerInfo.tie && game.gameOver){
+        game.winnerInfo.winnerPositions.forEach((position)=>{
             boardCells[position].classList.add("board__cell--end-game");
         });
-    }else if(game.endRoundInfo.tie && game.gameOver){
+    }else if(game.winnerInfo.tie && game.gameOver){
         boardCells.forEach((cell)=>{
             cell.classList.add("board__cell--end-game");
         });
@@ -177,53 +134,26 @@ function attEndGameInfo(){
     const endGameTitle = document.querySelector("#board-end-game > .board__title");
     const endGameInfo = document.querySelector("#board-end-game > .board__info");
     
-    if(game.endRoundInfo.tie){
+    if(game.winnerInfo.tie){
         endGameTitle.innerText = "Deu Velha!";
         endGameInfo.innerText = "Jogadores empataram"
     }else{
         endGameTitle.innerText = "Vencedor!";
         endGameTitle.style.borderColor = `var(--icon-${game.players[game.playerTurn].icon}-color)`;
-        endGameInfo.innerText = `${game.endRoundInfo.name} ganhou!`;
+        endGameInfo.innerText = `${game.winnerInfo.name} ganhou!`;
     };
 };
 
 function changeBoard(){
-    const board = document.querySelector("#board");
     
-    if(game.gameOver){
-        board.classList.remove("board--no-active");
-        board.classList.add("board--active");
-        boardCells.forEach((cell)=>{
-            cell.style.pointerEvents = "none";
-        });
-    }else{
-        board.classList.add("board--no-active");
-        board.classList.remove("board--active");
-        boardCells.forEach((cell)=>{
-            cell.style.pointerEvents = "auto";
-        });
-    };
-};
-
-function resetBoardCells(){
-    boardCells.forEach((cell)=>{
-        cell.innerHTML = "";
-    });
 };
 
 function resetInterface(){
+    inputsPlayerName.forEach((input)=>{input.value = "";});
     attButtonsIconStyle();
     attStartGameButtonStyle();
-    inputsPlayerName.forEach((input)=>{
-        input.value = "";
-    });
-    setClickOnCells();
-    breakTimeout();
-    resetBoard();
     endGameAnimation();
-    resetBoardCells()
-    changeBoard();
-};
+}
 
 gameModeButtons.forEach((button, index)=>{
     button.addEventListener("click",()=>{
@@ -251,8 +181,6 @@ startGameButton.addEventListener("click", ()=>{
         changeSection();
         attScoreboard();
         attPlayerTurnStyle();
-        setClickOnCells();
-        verifyPlayerType();
     }else{
         allIconButtons.forEach((button)=>{
             button.classList.remove("settings__icon-button--error");
@@ -261,21 +189,16 @@ startGameButton.addEventListener("click", ()=>{
                 button.classList.add("settings__icon-button--error");
             }, 5);
         });
-    };
+    };  
 });
 
-restartGameButton.addEventListener("click",()=>{
-    resetBoard();
-    changeFirstPlayerTurn();
-    attPlayerTurnStyle();
-    endGameAnimation();
-    resetBoardCells();
-    changeBoard();
-    verifyPlayerType();
+boardCells.forEach((cell, index)=>{
+    cell.addEventListener("click", ()=>{
+        if(!blockedClick)
+            handleClick(index);
+    });
 });
 
 backMenubutton.addEventListener("click",()=>{
-    resetGame();
-    resetInterface();
     changeSection();
 });

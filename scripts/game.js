@@ -27,20 +27,19 @@ const game = {
         [2,4,6]
     ],
 
-    ready: false,
-
-    playerTurn: 0,
+    winnerInfo: {
+        tie: false,
+        name: "",
+        winnerPositions: []
+    },
 
     firstPlayerTurn: 0,
 
+    playerTurn: 0,
+
     gameOver: false,
 
-    endRoundInfo: {
-        name: "",
-        winnerPositions: [],
-        tie: false,
-    }
-
+    ready: false
 };
 
 function setPlayersType(gameMode){
@@ -60,14 +59,6 @@ function setPlayersType(gameMode){
     };
 };
 
-function setPlayerIcon(icon, player){
-    const anotherIcon = icon === 0 ? 1 : 0;
-    const anotherPlayer = player === 0 ? 1 : 0;
-
-    game.players[player].icon = icon;
-    game.players[anotherPlayer].icon = anotherIcon;
-};  
-
 function setPlayerName(playerName, player){
     playerName = playerName.replace(/\s{2,}/g, ' ').trim();
     
@@ -77,21 +68,29 @@ function setPlayerName(playerName, player){
         game.players[player].name = `Jogador ${player + 1}`;  
 };
 
+function setPlayerIcon(icon, player){
+    const anotherIcon = icon === 0 ? 1 : 0;
+    const anotherPlayer = player === 0 ? 1 : 0;
+
+    game.players[player].icon = icon;
+    game.players[anotherPlayer].icon = anotherIcon;
+};  
+
 function setGameReady(){
     game.ready = true;
-}
+};
 
-function canHandleMove(cell){    
-    if(game.board[cell] === "" && !game.gameOver){
-        handleMove(cell);
+function canHandleMove(position){    
+    if(game.board[position] === "" && !game.gameOver){
+        handleMove(position);
         return true;
     }else{
         return false;
     };
 };
 
-function handleMove(cell){
-    game.board[cell] = game.players[game.playerTurn].icon;
+function handleMove(position){
+    game.board[position] = game.players[game.playerTurn].icon;
     verifyWinner();
     
     if(!game.gameOver)
@@ -105,8 +104,8 @@ function verifyWinner(){
        game.board[positions[2]] === game.players[game.playerTurn].icon){
             game.gameOver = true;
             game.players[game.playerTurn].score++;
-            game.endRoundInfo.name = game.players[game.playerTurn].name;
-            game.endRoundInfo.winnerPositions = [positions[0], positions[1], positions[2]];
+            game.winnerInfo.name = game.players[game.playerTurn].name;
+            game.winnerInfo.winnerPositions = [positions[0], positions[1], positions[2]];
             return;
        };
     });
@@ -114,19 +113,15 @@ function verifyWinner(){
 
 function verifyTie(){
     game.gameOver = true;
-    game.endRoundInfo.tie = true;
+    game.winnerInfo.tie = true;
 
     game.board.forEach((position)=>{
         if(position === ""){
             game.gameOver = false;
-            game.endRoundInfo.tie = false;
+            game.winnerInfo.tie = false;
             return;
         };
     });
-};
-
-function changePlayerTurn(){
-    game.playerTurn = game.playerTurn === 0 ? 1 : 0;
 };
 
 function changeFirstPlayerTurn(){
@@ -134,32 +129,31 @@ function changeFirstPlayerTurn(){
     game.playerTurn = game.firstPlayerTurn;
 };
 
-function computerMove(){
-    let aux = false;
-    let randomMove;
-
-    while(!aux){
-        randomMove = Math.floor(Math.random() * game.board.length);
-        if(game.board[randomMove] === ""){
-            aux = true;
-            return randomMove;
-        };
-    };
+function changePlayerTurn(){
+    game.playerTurn = game.playerTurn === 0 ? 1 : 0;
 };
 
+
+
+
+
+
+
+
+
 function resetBoard(){
-    game.board = game.board.map(position => "");
+    game.board = game.board.map(() => "");
     game.gameOver = false;
-    game.endRoundInfo.name = "";
-    game.endRoundInfo.winnerPositions = [];
-    game.endRoundInfo.tie = false;
+    game.winnerInfo.tie = false;
+    game.winnerInfo.name = "";
+    game.winnerInfo.winnerPositions = [];
 };
 
 function resetGame(){
-    game.players.forEach((player)=>{player.score = 0; player.type = ""});
-    game.ready = false;
+    game.players.forEach((player)=>{player.type = ""; player.icon = ""});  
+    game.firstPlayerTurn = 0; 
     game.playerTurn = 0;
-    game.firstPlayerTurn = 0;
-
-    resetBoard();
+    game.ready = false;
 };
+
+
