@@ -13,9 +13,7 @@ const game = {
             score: 0
         }
     ],
-
     board: ["","","","","","","","",""],
-
     winnerPositions: [
         [0,1,2],
         [3,4,5],
@@ -26,19 +24,14 @@ const game = {
         [0,4,8],
         [2,4,6]
     ],
-
     winnerInfo: {
         tie: false,
         name: "",
         winnerPositions: []
     },
-
     firstPlayerTurn: 0,
-
     playerTurn: 0,
-
     gameOver: false,
-
     ready: false
 };
 
@@ -134,12 +127,18 @@ function changePlayerTurn(){
 };
 
 
+function computerMove(){
+    let aux = false;
+    let randomMove;
 
-
-
-
-
-
+    while(!aux){
+        randomMove = Math.floor(Math.random() * game.board.length);
+        if(game.board[randomMove] === ""){
+            aux = true;
+            return randomMove;
+        };
+    };
+};
 
 function resetBoard(){
     game.board = game.board.map(() => "");
@@ -150,7 +149,7 @@ function resetBoard(){
 };
 
 function resetGame(){
-    game.players.forEach((player)=>{player.type = ""; player.icon = ""});  
+    game.players.forEach((player)=>{player.type = ""; player.icon = ""; player.score = 0});  
     game.firstPlayerTurn = 0; 
     game.playerTurn = 0;
     game.ready = false;

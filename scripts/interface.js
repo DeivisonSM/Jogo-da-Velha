@@ -1,5 +1,6 @@
 const gameModeButtons = document.querySelectorAll(".menu__button");
 const startGameButton = document.querySelector("#start-game-button");
+const restartGameButton = document.querySelector("#restart-game-button");
 const backMenubutton = document.querySelector("#back-menu-button");
 
 const inputsPlayerName = document.querySelectorAll(".settings__player-name");
@@ -8,8 +9,7 @@ const allIconButtons = document.querySelectorAll(".settings__icon-button");
 
 const boardCells = document.querySelectorAll(".board__cell");
 
-let currentContainer = 0;
-let blockedClick = false;
+let currentContainer = 0, blockedClick = true, computerMoveTimeout;
 
 function changeSection(){
     const pageContainers = document.querySelectorAll(".container__single");
@@ -79,6 +79,15 @@ function attPlayerTurnStyle(){
     scoreboardsPlayers[game.playerTurn].classList.add("game__scoreboard-player--active");
 };
 
+function verifyPlayerType(){
+    if(game.players[game.playerTurn].type === "player"){
+        blockedClick = false;
+    }else{
+        blockedClick = true;
+        computerMoveTimeout = setTimeout(()=>{handleClick(computerMove())}, 1000);
+    };
+};
+
 function handleClick(position){
     if(canHandleMove(position)){
         addIconOnCell(boardCells[position]);
@@ -92,12 +101,12 @@ function finishMove(){
     if(!game.gameOver){
         changePlayerTurn();
         attPlayerTurnStyle();
-        /*verifyPlayerType();*/
+        verifyPlayerType();
     }else{
         attScoreboard();
         endGameAnimation();
         attEndGameInfo();
-        changeBoard();/*********************************** */
+        changeBoard();
     };
 };
 
@@ -136,7 +145,8 @@ function attEndGameInfo(){
     
     if(game.winnerInfo.tie){
         endGameTitle.innerText = "Deu Velha!";
-        endGameInfo.innerText = "Jogadores empataram"
+        endGameTitle.style.borderColor = "var(--fourth-page-color)";
+        endGameInfo.innerText = "Jogadores empataram";
     }else{
         endGameTitle.innerText = "Vencedor!";
         endGameTitle.style.borderColor = `var(--icon-${game.players[game.playerTurn].icon}-color)`;
@@ -145,14 +155,35 @@ function attEndGameInfo(){
 };
 
 function changeBoard(){
+    const board = document.querySelector("#board");
     
+    if(game.gameOver){
+        board.classList.remove("board--no-active");
+        board.classList.add("board--active");
+        boardCells.forEach((cell)=>{
+            cell.style.pointerEvents = "none";
+        });
+    }else{
+        board.classList.add("board--no-active");
+        board.classList.remove("board--active");
+        boardCells.forEach((cell)=>{
+            cell.style.pointerEvents = "auto";
+        });
+    };
+};
+
+function resetBoardInterface(){
+    blockedClick = true;
+    boardCells.forEach((cell)=>{cell.innerHTML = ""});
+    endGameAnimation();
+    changeBoard();
 };
 
 function resetInterface(){
+    clearTimeout(computerMoveTimeout);
     inputsPlayerName.forEach((input)=>{input.value = "";});
     attButtonsIconStyle();
     attStartGameButtonStyle();
-    endGameAnimation();
 }
 
 gameModeButtons.forEach((button, index)=>{
@@ -181,6 +212,7 @@ startGameButton.addEventListener("click", ()=>{
         changeSection();
         attScoreboard();
         attPlayerTurnStyle();
+        verifyPlayerType();
     }else{
         allIconButtons.forEach((button)=>{
             button.classList.remove("settings__icon-button--error");
@@ -199,6 +231,18 @@ boardCells.forEach((cell, index)=>{
     });
 });
 
+restartGameButton.addEventListener("click",()=>{
+    changeFirstPlayerTurn();
+    attPlayerTurnStyle();
+    resetBoard();
+    resetBoardInterface();
+    verifyPlayerType();
+});
+
 backMenubutton.addEventListener("click",()=>{
+    resetBoard();
+    resetGame();
+    resetBoardInterface();
+    resetInterface();
     changeSection();
 });
